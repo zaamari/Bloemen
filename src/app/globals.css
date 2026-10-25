@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+/* Huisstijl luxurypresent: zwart, goud, bordeaux en ivoor. */
+@theme {
+  --color-noir: #0b0606;
+  --color-noir-2: #170b0d;
+  --color-noir-3: #24121a;
+  --color-gold: #dcbf78;
+  --color-gold-light: #f3e2b3;
+  --color-gold-deep: #a8843e;
+  --color-bordeaux: #7d1424;
+  --color-bordeaux-deep: #4a0b15;
+  --color-ivory: #f8f3ef;
+  --color-ivory-2: #f1e7e1;
+  --color-blush: #ead7d2;
+  --color-ink: #1c0e10;
+  --color-muted: #6f5a5c;
+  --color-line: #1c0e101f;
+
+  --font-display: var(--font-italiana), "Didot", Georgia, serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+
+  --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-shine: shine 6s var(--ease-lux) infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-drift: drift 16s ease-in-out infinite alternate;
+  --animate-drift-slow: drift 22s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-120%) skewX(-18deg); }
+  55%, 100% { transform: translateX(220%) skewX(-18deg); }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes drift {
+  to { transform: translate(60px, 40px) scale(1.08); }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-ivory text-ink font-sans antialiased;
+  }
+  ::selection {
+    background: var(--color-bordeaux);
+    color: var(--color-ivory);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.18em];
+  }
+  .gold-text {
+    background: linear-gradient(100deg, var(--color-gold-deep) 0%, var(--color-gold-light) 45%, var(--color-gold) 60%, var(--color-gold-deep) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold transition duration-300 ease-(--ease-lux) active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-gold {
+    @apply text-noir;
+    background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold) 45%, var(--color-gold-deep));
+    box-shadow: 0 10px 30px -12px rgb(220 191 120 / 0.6);
+  }
+  .btn-gold:hover {
+    box-shadow: 0 14px 40px -10px rgb(220 191 120 / 0.8);
+    transform: translateY(-1px);
+  }
+  .btn-ghost-dark {
+    @apply border border-white/20 bg-white/5 text-ivory backdrop-blur-md hover:bg-white/10;
+  }
+  .btn-dark {
+    @apply bg-noir text-ivory hover:bg-noir-3;
+  }
+  .btn-outline {
+    @apply border border-ink/20 text-ink hover:border-ink/50;
+  }
+  .field {
+    @apply w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-muted/60 focus:border-gold-deep focus:ring-2 focus:ring-gold/30;
+  }
+  .label {
+    @apply mb-1.5 block text-[13px] font-semibold text-ink;
+  }
+  .chip {
+    @apply inline-flex cursor-pointer select-none items-center rounded-full border border-line bg-white px-4 py-2 text-[13px] font-medium transition hover:border-ink/40;
+  }
+  .chip-on {
+    @apply border-noir bg-noir text-ivory hover:border-noir;
+  }
+  .container-lux {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
+  }
+  /* Fijne korrel over donkere vlakken, voor een stoffige, luxe uitstraling */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.08;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* WhatsApp-knop schuift omhoog als een pagina een vaste balk onderaan heeft */
+.wa-button {
+  bottom: max(20px, calc(env(safe-area-inset-bottom) + 12px));
+}
+body[data-stickybar] .wa-button {
+  bottom: calc(env(safe-area-inset-bottom) + 100px);
+}
+@media (min-width: 1024px) {
+  body[data-stickybar] .wa-button {
+    bottom: 24px;
+  }
+}
